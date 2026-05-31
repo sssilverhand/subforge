@@ -1,7 +1,7 @@
 server:
   host: "127.0.0.1"
   port: 8080
-  external_url: "https://sub.ihne.online"
+  external_url: "https://sub.example.example"
 
 database:
   dsn: "postgres://subforge:password@localhost:5432/subforge?sslmode=disable"
