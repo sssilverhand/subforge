@@ -1,0 +1,28 @@
+[Unit]
+Description=SubForge VPN Subscription Manager
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=subforge
+Group=subforge
+WorkingDirectory=/opt/subforge
+ExecStart=/opt/subforge/subforge -config /etc/subforge/config.yaml
+Restart=on-failure
+RestartSec=5s
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/subforge
+PrivateTmp=true
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=subforge
+
+[Install]
+WantedBy=multi-user.target

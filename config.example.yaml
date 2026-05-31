@@ -1,0 +1,21 @@
+server:
+  host: "127.0.0.1"
+  port: 8080
+  external_url: "https://sub.ihne.online"
+
+database:
+  dsn: "postgres://subforge:password@localhost:5432/subforge?sslmode=disable"
+
+auth:
+  jwt_secret: "change-me-to-a-long-random-string"
+  token_expiry: "24h"
+  super_admin_setup: true   # set false after first login
+
+bot:
+  enabled: false
+  token: ""
+  webhook: ""   # leave empty for long polling
+
+scheduler:
+  traffic_poll_interval: "60s"
+  expiry_check_interval: "5m"

@@ -1,0 +1,14 @@
+server:
+  host: "0.0.0.0"
+  port: 9090
+  secret: "change-me-to-a-long-random-string"  # used by main SubForge server
+
+xray:
+  binary:  /usr/local/bin/xray
+  config:  /etc/xray/config.json
+  service: xray.service
+
+hysteria2:
+  binary:  /usr/local/bin/hysteria2
+  config:  /etc/hysteria2/config.yaml
+  service: hysteria2.service

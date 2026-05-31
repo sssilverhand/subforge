@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build & Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: web/package-lock.json
+
+      - name: Build React UI
+        run: cd web && npm ci && npm run build
+
+      - name: Build binaries
+        run: |
+          mkdir -p dist
+          for ARCH in amd64 arm64; do
+            GOOS=linux GOARCH=$ARCH go build \
+              -ldflags="-s -w -X main.version=${{ github.ref_name }}" \
+              -o dist/subforge-linux-$ARCH \
+              ./cmd/subforge
+
+            GOOS=linux GOARCH=$ARCH go build \
+              -ldflags="-s -w -X main.version=${{ github.ref_name }}" \
+              -o dist/subforge-agent-linux-$ARCH \
+              ./cmd/agent
+          done
+          ls -lh dist/
+
+      - name: Create checksums
+        run: |
+          cd dist
+          sha256sum * > checksums.txt
+          cat checksums.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/subforge-linux-amd64
+            dist/subforge-linux-arm64
+            dist/subforge-agent-linux-amd64
+            dist/subforge-agent-linux-arm64
+            dist/checksums.txt
+          generate_release_notes: true

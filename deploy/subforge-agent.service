@@ -1,0 +1,17 @@
+[Unit]
+Description=SubForge Node Agent
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/subforge
+ExecStart=/usr/local/bin/subforge-agent -config /etc/subforge/agent.yaml
+Restart=on-failure
+RestartSec=5s
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=subforge-agent
+
+[Install]
+WantedBy=multi-user.target
